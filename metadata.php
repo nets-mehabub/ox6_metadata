@@ -28,6 +28,7 @@ $aModule = array(
         'en' => 'Nets safe online payments'
     ),
     'extend' => array(
+		OxidEsales\NetsModule\core\nets_events::class => OxidEsales\NetsModule\core\nets_events::class ,
         OxidEsales\NetsModule\Controller\netsOrder::class => OxidEsales\NetsModule\Controller\netsOrder::class ,
         OxidEsales\NetsModule\models\netsPaymentGateway::class => OxidEsales\NetsModule\models\netsPaymentGateway::class ,
         OxidEsales\NetsModule\Controller\netsPayment::class => OxidEsales\NetsModule\Controller\netsPayment::class ,
