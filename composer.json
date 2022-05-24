@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "OxidEsales\\NetsModule\\": ""
+            "OxidEsales\\NetsModule\\": "../../../source/modules/nets"
         }
     },
 	"minimum-stability": "dev",
