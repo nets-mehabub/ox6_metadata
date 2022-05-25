@@ -4,10 +4,8 @@ namespace OxidEsales\NetsModule\Controller;
 /**
  * Nets Order Controller class
  */
-//require_once getShopBasePath() . 'modules/nets/api/nets_api.php';
-//require_once getShopBasePath() . 'modules/nets/api/netsPaymentTypes.php';
-Use OxidEsales\NetsModule\Api\NetsApi;
-Use OxidEsales\NetsModule\Api\NetsPaymentTypes;
+use OxidEsales\NetsModule\Api\NetsApi;
+use OxidEsales\NetsModule\Api\NetsPaymentTypes;
 /**
  * Class controls nets payment process
  * It also shows the nets embedded checkout window

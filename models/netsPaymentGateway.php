@@ -1,7 +1,6 @@
 <?php 
 namespace OxidEsales\NetsModule\Models;
-//require_once getShopBasePath() . 'modules/nets/api/nets_api.php';
-//require_once getShopBasePath() . 'modules/nets/api/netsPaymentTypes.php';
+
 use OxidEsales\NetsModule\Api\NetsPaymentTypes;
 use OxidEsales\NetsModule\Api\NetsApi;
 class NetsPaymentGateway extends NetsPaymentGateway_parent

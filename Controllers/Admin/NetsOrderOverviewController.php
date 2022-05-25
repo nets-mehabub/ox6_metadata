@@ -1,7 +1,7 @@
 <?php
 namespace OxidEsales\NetsModule\Controller\Admin;
-//require_once getShopBasePath() . 'modules/nets/api/nets_api.php';
-Use OxidEsales\NetsModule\Api\NetsApi;
+
+use OxidEsales\NetsModule\Api\NetsApi;
 /**
  * order_overview.php override
  * Nets Order Overview class - In use for admin order list customization

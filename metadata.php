@@ -35,7 +35,7 @@ $aModule = array(
 	'controllers' => array(
         'order' => \OxidEsales\NetsModule\Controller\NetsOrderController::class,
         'payment' => \OxidEsales\NetsModule\Controller\NetsPaymentController::class,
-        'order_overview' => \OxidEsales\NetsModule\Controller\NetsThankyouController::class,
+        'orderoverview' => \OxidEsales\NetsModule\Controller\NetsThankyouController::class,
         'thankyou' => \OxidEsales\NetsModule\Controller\Admin\NetsOrderOverviewController::class
     ),   
     'blocks' => array(
@@ -144,7 +144,7 @@ $aModule = array(
     ),
     'templates' => array(),    
     'events'       => array(
-        'onActivate'   => '\OxidEsales\NetsModule\Core\nets_events::onActivate',
-        'onDeactivate' => '\OxidEsales\NetsModule\Core\nets_events::onDeactivate'
+        'onActivate'   => '\OxidEsales\NetsModule\Core\NetsEvents::onActivate',
+        'onDeactivate' => '\OxidEsales\NetsModule\Core\NetsEvents::onDeactivate'
     )
 );
