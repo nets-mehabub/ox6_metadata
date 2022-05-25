@@ -3,7 +3,7 @@ namespace OxidEsales\NetsModule\Controller;
 /**
  * Extending thank you controller for adding payment id in frontend
  */
-class netsThankyou extends netsThankyou_parent
+class NetsThankyouController extends NetsThankyou_parent
 {
 	public function getPaymentId()
 	{

@@ -28,17 +28,16 @@ $aModule = array(
         'en' => 'Nets safe online payments'
     ),
     'extend' => array(
-		OxidEsales\NetsModule\core\nets_events::class => OxidEsales\NetsModule\core\nets_events::class ,
-        OxidEsales\NetsModule\Controller\netsOrder::class => OxidEsales\NetsModule\Controller\netsOrder::class ,
-        OxidEsales\NetsModule\models\netsPaymentGateway::class => OxidEsales\NetsModule\models\netsPaymentGateway::class ,
-        OxidEsales\NetsModule\Controller\netsPayment::class => OxidEsales\NetsModule\Controller\netsPayment::class ,
-        OxidEsales\NetsModule\Controller\admin\nets_order_overview::class => OxidEsales\NetsModule\Controller\admin\nets_order_overview::class ,
-        OxidEsales\NetsModule\Controller\netsThankyou::class => OxidEsales\NetsModule\Controller\netsThankyou::class
-                
-    ),    
-    'files' => array(
-      'nets_events' => 'nets/core/nets_events.php'
+		\OxidEsales\NetsModule\Models\NetsPaymentGateway::class => \OxidEsales\NetsModule\Models\NetsPaymentGateway::class,
+		\OxidEsales\NetsModule\Core\NetsEvents::class => \OxidEsales\NetsModule\Core\NetsEvents::class
+               
     ),
+	'controllers' => array(
+        'order' => \OxidEsales\NetsModule\Controller\NetsOrderController::class,
+        'payment' => \OxidEsales\NetsModule\Controller\NetsPaymentController::class,
+        'order_overview' => \OxidEsales\NetsModule\Controller\NetsThankyouController::class,
+        'thankyou' => \OxidEsales\NetsModule\Controller\Admin\NetsOrderOverviewController::class
+    ),   
     'blocks' => array(
         array(
             'template' => 'order_overview.tpl',
@@ -143,13 +142,9 @@ $aModule = array(
             'value' => 'false'
         )
     ),
-    'templates' => array(),
-    //'events' => array(
-       // 'onActivate' => 'nets_events::onActivate',
-     //   'onDeactivate' => 'nets_events::onDeactivate'
-    //)
+    'templates' => array(),    
     'events'       => array(
         'onActivate'   => '\OxidEsales\NetsModule\Core\nets_events::onActivate',
         'onDeactivate' => '\OxidEsales\NetsModule\Core\nets_events::onDeactivate'
-    ),
+    )
 );

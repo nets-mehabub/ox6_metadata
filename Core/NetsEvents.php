@@ -1,9 +1,10 @@
 <?php
-namespace OxidEsales\NetsModule\core;
-require_once getShopBasePath() . 'modules/nets/api/nets_api.php';
-require_once getShopBasePath() . 'modules/nets/api/netsPaymentTypes.php';
-
-class nets_events extends oxUBase
+namespace OxidEsales\NetsModule\Core;
+//require_once getShopBasePath() . 'modules/nets/api/nets_api.php';
+//require_once getShopBasePath() . 'modules/nets/api/netsPaymentTypes.php';
+Use OxidEsales\NetsModule\Api\NetsApi;
+Use OxidEsales\NetsModule\Api\NetsPaymentTypes;
+class NetsEvents extends oxUBase
 {
 
     static $nets_log = true;

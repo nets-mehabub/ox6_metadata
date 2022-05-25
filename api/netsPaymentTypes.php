@@ -1,12 +1,12 @@
 <?php
-namespace OxidEsales\NetsModule\api;
+namespace OxidEsales\NetsModule\Api;
 
 /*
  * nets payment type mapping to oxid payment ids
  *
  */
-if (! class_exists("netsPaymentTypes")) {
-	class netsPaymentTypes
+if (! class_exists("NetsPaymentTypes")) {
+	class NetsPaymentTypes
 	{
 		static $nets_payment_types = Array(
 			Array(

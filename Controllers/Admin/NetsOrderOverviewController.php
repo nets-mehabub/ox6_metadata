@@ -1,13 +1,13 @@
 <?php
-namespace OxidEsales\NetsModule\Controller\admin;
-require_once getShopBasePath() . 'modules/nets/api/nets_api.php';
-
+namespace OxidEsales\NetsModule\Controller\Admin;
+//require_once getShopBasePath() . 'modules/nets/api/nets_api.php';
+Use OxidEsales\NetsModule\Api\NetsApi;
 /**
  * order_overview.php override
  * Nets Order Overview class - In use for admin order list customization
  * Cancel, Capture, Refund and Partial nets payments
  */
-class Nets_Order_Overview extends Nets_Order_Overview_parent
+class NetsOrderOverviewController extends NetsOrderOverview_parent
 {
 
     const ENDPOINT_TEST = 'https://test.api.dibspayment.eu/v1/payments/';

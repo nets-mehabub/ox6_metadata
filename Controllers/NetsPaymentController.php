@@ -1,13 +1,14 @@
 <?php 
 namespace OxidEsales\NetsModule\Controller;
-require_once getShopBasePath() . 'modules/nets/api/nets_api.php';
-require_once getShopBasePath() . 'modules/nets/api/netsPaymentTypes.php';
+//require_once getShopBasePath() . 'modules/nets/api/nets_api.php';
+//require_once getShopBasePath() . 'modules/nets/api/netsPaymentTypes.php';
 
-
+Use OxidEsales\NetsModule\Api\NetsApi;
+Use OxidEsales\NetsModule\Api\NetsPaymentTypes;
 /**
  * Description of netsPayment
  */
-class netsPayment extends netsPayment_parent
+class NetsPaymentController extends NetsPayment_parent
 {
 	// var $nets_payment_types_active;
 	var $payment_types_active;
