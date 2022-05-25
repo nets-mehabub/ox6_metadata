@@ -23,8 +23,5 @@
         "psr-4": {
             "OxidEsales\\NetsModule\\": "../../../source/modules/nets"
         }
-    },
-	"minimum-stability": "dev",
-    "prefer-stable": true
-    
+    }
 }
