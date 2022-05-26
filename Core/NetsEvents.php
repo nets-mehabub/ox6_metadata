@@ -3,7 +3,7 @@ namespace OxidEsales\NetsModule\Core;
 
 use OxidEsales\NetsModule\Api\NetsLog;
 use OxidEsales\NetsModule\Api\NetsPaymentTypes;
-class NetsEvents extends NetsEvents_parent
+class NetsEvents
 {
 
     static $NetsLog = true;

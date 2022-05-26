@@ -6,7 +6,7 @@ use OxidEsales\NetsModule\Api\NetsPaymentTypes;
 /**
  * Description of netsPayment
  */
-class NetsPaymentController extends NetsPayment_parent
+class NetsPaymentController extends NetsPaymentController_parent
 {
 	// var $nets_payment_types_active;
 	var $payment_types_active;
