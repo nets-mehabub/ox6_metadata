@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "OxidEsales\\NetsModule\\": "../../../../source/modules/nets/netseasy"
+            "OxidEsales\\NetsModule\\": "./"
         }
     }
 }
