@@ -21,7 +21,7 @@ $sMetadataVersion = '2.0';
  * Module information
  */
 $aModule = array(
-    'id' => 'oxenetseasy',
+    'id' => 'esnetseasy',
     'title' => 'Nets Easy',
     'version' => '2.0.0',
     'author' => 'Nets eCom',
