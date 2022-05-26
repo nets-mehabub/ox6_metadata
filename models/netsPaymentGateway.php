@@ -2,33 +2,33 @@
 namespace OxidEsales\NetsModule\Models;
 
 use OxidEsales\NetsModule\Api\NetsPaymentTypes;
-use OxidEsales\NetsModule\Api\NetsApi;
+use OxidEsales\NetsModule\Api\NetsLog;
 class NetsPaymentGateway extends NetsPaymentGateway_parent
 {
-	protected $_nets_log = false;
+	protected $_NetsLog = false;
 
 	public function executePayment($dAmount, &$oOrder)
 	{
-		nets_log::log($this->_nets_log, 'executePayment ', $this->getFunctionName);
-		$this->_nets_log = $this->getConfig()->getConfigParam('nets_blDebug_log');
+		NetsLog::log($this->_NetsLog, 'executePayment ', $this->getFunctionName);
+		$this->_NetsLog = $this->getConfig()->getConfigParam('nets_blDebug_log');
 		// $ox_payment_id = $this->getSession()->getInstance()->getBasket()->getPaymentId();
 		$ox_payment_id = $this->getSession()->getBasket()->getPaymentId();
 		$payment_type = netsPaymentTypes::getNetsPaymentType($ox_payment_id);
-		nets_log::log($this->_nets_log, "netsPaymentGateway executePayment: " . $payment_type);
+		NetsLog::log($this->_NetsLog, "netsPaymentGateway executePayment: " . $payment_type);
 
 		if (! isset($payment_type) || ! $payment_type) {
-			nets_log::log($this->_nets_log, "netsPaymentGateway executePayment, parent");
+			NetsLog::log($this->_NetsLog, "netsPaymentGateway executePayment, parent");
 			return parent::executePayment($dAmount, $oOrder);
 		}
-		nets_log::log($this->_nets_log, "netsPaymentGateway executePayment");
+		NetsLog::log($this->_NetsLog, "netsPaymentGateway executePayment");
 		$success = true;
 		$this->getSession()->deleteVariable('nets_success');
 
 		if (isset($success) && $success === true) {
-			nets_log::log($this->_nets_log, "netsPaymentGateway executePayment - success");
+			NetsLog::log($this->_NetsLog, "netsPaymentGateway executePayment - success");
 			return true;
 		}
-		nets_log::log($this->_nets_log, "netsPaymentGateway executePayment - failure");
+		NetsLog::log($this->_NetsLog, "netsPaymentGateway executePayment - failure");
 		return false;
 	}
 }

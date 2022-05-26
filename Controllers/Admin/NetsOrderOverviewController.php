@@ -1,13 +1,13 @@
 <?php
 namespace OxidEsales\NetsModule\Controller\Admin;
 
-use OxidEsales\NetsModule\Api\NetsApi;
+use OxidEsales\NetsModule\Api\NetsLog;
 /**
  * order_overview.php override
  * Nets Order Overview class - In use for admin order list customization
  * Cancel, Capture, Refund and Partial nets payments
  */
-class NetsOrderOverviewController extends NetsOrderOverview_parent
+class NetsOrderOverviewController extends NetsOrderOverviewController_parent
 {
 
     const ENDPOINT_TEST = 'https://test.api.dibspayment.eu/v1/payments/';
@@ -22,12 +22,12 @@ class NetsOrderOverviewController extends NetsOrderOverview_parent
 
     private $client;
 
-    protected $_nets_log;
+    protected $_NetsLog;
 
     public function __construct()
     {
-        $this->_nets_log = $this->getConfig()->getConfigParam('nets_blDebug_log');
-        nets_log::log($this->_nets_log, "Nets_Order_Overview, constructor");
+        $this->_NetsLog = $this->getConfig()->getConfigParam('nets_blDebug_log');
+        NetsLog::log($this->_NetsLog, "NetsOrderOverview, constructor");
     }
 
     /**
@@ -216,12 +216,12 @@ class NetsOrderOverviewController extends NetsOrderOverview_parent
                 'orderItems' => $data['items']
             ];
         }
-        nets_log::log($this->_nets_log, "Nets_Order_Overview" . json_encode($body));
+        NetsLog::log($this->_NetsLog, "Nets_Order_Overview" . json_encode($body));
 
         $api_return = $this->getCurlResponse($chargeUrl, 'POST', json_encode($body));
         $response = json_decode($api_return, true);
 
-        nets_log::log($this->_nets_log, "Nets_Order_Overview" . $response);
+        NetsLog::log($this->_NetsLog, "Nets_Order_Overview" . $response);
         $oDB = oxDb::getDb(true);
         $dt = date("Y-m-d H:i:s");
         $oDB->Execute("UPDATE oxorder SET oxpaid = '{$dt}'
@@ -281,7 +281,7 @@ class NetsOrderOverviewController extends NetsOrderOverview_parent
                 $oDb = oxDb::getDb();
                 $oDb->execute("UPDATE oxnets SET charge_left_qty = 0 WHERE transaction_id = '" . $payment_id . "' AND charge_id = '" . $val['chargeId'] . "'");
 
-                nets_log::log($this->_nets_log, "Nets_Order_Overview getorder refund" . json_encode($body));
+                NetsLog::log($this->_NetsLog, "Nets_Order_Overview getorder refund" . json_encode($body));
             } else if (in_array($ref, array_column($val['orderItems'], 'reference'))) {
 
                 $oDb = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
@@ -308,7 +308,7 @@ class NetsOrderOverviewController extends NetsOrderOverview_parent
 
                         $refundUrl = $this->getRefundPaymentUrl($key);
                         $this->getCurlResponse($refundUrl, 'POST', json_encode($body));
-                        nets_log::log($this->_nets_log, "Nets_Order_Overview getorder refund" . json_encode($body));
+                        NetsLog::log($this->_NetsLog, "Nets_Order_Overview getorder refund" . json_encode($body));
 
                         $oDb = oxDb::getDb(oxDb::FETCH_MODE_ASSOC);
                         $singlecharge_query = $oDb->getAll("SELECT  `charge_left_qty` FROM oxnets WHERE transaction_id = ? AND charge_id = ? AND product_ref = ? AND charge_left_qty !=0", [
@@ -840,7 +840,7 @@ class NetsOrderOverviewController extends NetsOrderOverview_parent
                 break;
         }
         if (! empty($error_message)) {
-            nets_log::log($this->_nets_log, "netsOrder Curl request error, $error_message");
+            NetsLog::log($this->_NetsLog, "netsOrder Curl request error, $error_message");
         }
         curl_close($oCurl);
 

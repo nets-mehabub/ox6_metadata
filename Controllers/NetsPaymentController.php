@@ -1,7 +1,7 @@
 <?php 
 namespace OxidEsales\NetsModule\Controller;
 
-use OxidEsales\NetsModule\Api\NetsApi;
+use OxidEsales\NetsModule\Api\NetsLog;
 use OxidEsales\NetsModule\Api\NetsPaymentTypes;
 /**
  * Description of netsPayment
@@ -10,12 +10,12 @@ class NetsPaymentController extends NetsPayment_parent
 {
 	// var $nets_payment_types_active;
 	var $payment_types_active;
-	protected $_nets_log = false;
+	protected $_NetsLog = false;
 
 	public function init()
 	{
 		$this->getSession()->deleteVariable('nets_err_msg');
-		$this->_nets_log = $this->getConfig()->getConfigParam('nets_blDebug_log');
+		$this->_NetsLog = $this->getConfig()->getConfigParam('nets_blDebug_log');
 		$this->getNetsPaymentTypes();
 		$this->_sThisTemplate = parent::render();
 		parent::init();

@@ -6,7 +6,12 @@
  * @package Nets
  * @copyright nets
  */
-
+use OxidEsales\Eshop\Application\Controller\OrderController;
+use OxidEsales\Eshop\Application\Controller\PaymentController;
+use OxidEsales\NetsModule\Controller\NetsOrderController;
+use OxidEsales\NetsModule\Controller\NetsPaymentController;
+use OxidEsales\NetsModule\Models\NetsPaymentGateway;
+use OxidEsales\NetsModule\Core\NetsEvents;
 /**
  * Metadata version
  */
@@ -16,7 +21,7 @@ $sMetadataVersion = '2.0';
  * Module information
  */
 $aModule = array(
-    'id' => 'nets',
+    'id' => 'netseasy',
     'title' => 'Nets Easy',
     'version' => '2.0.0',
     'author' => 'Nets eCom',
@@ -27,16 +32,16 @@ $aModule = array(
         'de' => 'Nets einfach sicher zahlen',
         'en' => 'Nets safe online payments'
     ),
-    'extend' => array(
-		\OxidEsales\NetsModule\Models\NetsPaymentGateway::class => \OxidEsales\NetsModule\Models\NetsPaymentGateway::class,
-		\OxidEsales\NetsModule\Core\NetsEvents::class => \OxidEsales\NetsModule\Core\NetsEvents::class
-               
+    'controllers' => array(       
+        'NetsThankyou' => \OxidEsales\NetsModule\Controller\NetsThankyouController::class,
+        'NetsOrderOverview' => \OxidEsales\NetsModule\Controller\Admin\NetsOrderOverviewController::class        
     ),
-	'controllers' => array(
-        'order' => \OxidEsales\NetsModule\Controller\NetsOrderController::class,
-        'payment' => \OxidEsales\NetsModule\Controller\NetsPaymentController::class,
-        'orderoverview' => \OxidEsales\NetsModule\Controller\NetsThankyouController::class,
-        'thankyou' => \OxidEsales\NetsModule\Controller\Admin\NetsOrderOverviewController::class
+    'extend' => array(
+                OrderController::class => NetsOrderController::class,
+                PaymentController::class => NetsPaymentController::class,
+		NetsPaymentGateway::class => NetsPaymentGateway::class,
+		NetsEvents::class => NetsEvents::class                   
+
     ),   
     'blocks' => array(
         array(

@@ -4,13 +4,13 @@ namespace OxidEsales\NetsModule\Controller;
 /**
  * Nets Order Controller class
  */
-use OxidEsales\NetsModule\Api\NetsApi;
+use OxidEsales\NetsModule\Api\NetsLog;
 use OxidEsales\NetsModule\Api\NetsPaymentTypes;
 /**
  * Class controls nets payment process
  * It also shows the nets embedded checkout window
  */
-class NetsOrderController extends NetsOrder_parent
+class NetsOrderController extends NetsOrderController_parent
 {
 
     const EMBEDDED = "EmbeddedCheckout";
@@ -29,7 +29,7 @@ class NetsOrderController extends NetsOrder_parent
 
     const MODULE_NAME = "nets_easy";
 
-    protected $_nets_log = false;
+    protected $_NetsLog = false;
 
     protected $client;
 
@@ -38,8 +38,8 @@ class NetsOrderController extends NetsOrder_parent
      */
     public function __construct()
     {
-        $this->_nets_log = $this->getConfig()->getConfigParam('nets_blDebug_log');
-        nets_log::log($this->_nets_log, "netsOrder, constructor");
+        $this->_NetsLog = $this->getConfig()->getConfigParam('nets_blDebug_log');
+        NetsLog::log($this->_NetsLog, "NetsOrderController, constructor");
     }
 
     /**
@@ -49,7 +49,7 @@ class NetsOrderController extends NetsOrder_parent
      */
     protected function _getNextStep($iSuccess)
     {
-        nets_log::log($this->_nets_log, "netsOrder, _getNextStep");
+        NetsLog::log($this->_NetsLog, "NetsOrderController, _getNextStep");
         $nextStep = parent::_getNextStep($iSuccess);
         return $nextStep;
     }
@@ -59,7 +59,7 @@ class NetsOrderController extends NetsOrder_parent
      */
     public function execute()
     {
-        nets_log::log($this->_nets_log, "netsOrder, execute");
+        NetsLog::log($this->_NetsLog, "NetsOrderController, execute");
         $oBasket = $this->getSession()->getBasket();
         $oUser = $this->getUser();
         if (! $oUser) {
@@ -69,7 +69,7 @@ class NetsOrderController extends NetsOrder_parent
             try {
                 if ($this->is_embedded()) {
                     $sess_id = $this->getSession()->getVariable('sess_challenge');
-                    $oDB = oxDb::getDb(true);
+                    $oDB = \oxDb::getDb(true);
                     $sSQL_select = "SELECT oxorder_id FROM oxnets WHERE oxorder_id = ? LIMIT 1";
                     $order_id = $oDB->getOne($sSQL_select, [
                         $sess_id
@@ -81,13 +81,13 @@ class NetsOrderController extends NetsOrder_parent
                     }
 
                     // finalizing ordering process (validating, storing order into DB, executing payment, setting status ...)
-                    $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+                    $oOrder = \oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
                     $iSuccess = $oOrder->finalizeOrder($oBasket, $oUser);
                     $orderNr = $oOrder->oxorder__oxordernr->value;
                     $paymentId = $this->getSession()->getVariable('payment_id');
                     $this->getSession()->setVariable('orderNr', $orderNr);
-                    nets_log::log($this->_nets_log, " refupdate netsOrder, order nr", $oOrder->oxorder__oxordernr->value);
-                    $oDb = oxDb::getDb();
+                    NetsLog::log($this->_NetsLog, " refupdate NetsOrder, order nr", $oOrder->oxorder__oxordernr->value);
+                    $oDb = \oxDb::getDb();
 
                     $oDb->execute("UPDATE oxnets SET oxordernr = ?,  hash = ?, oxorder_id = ? WHERE transaction_id = ? ", [
                         $orderNr,
@@ -100,14 +100,14 @@ class NetsOrderController extends NetsOrder_parent
 
                     $api_return = $this->getCurlResponse($this->getApiUrl() . $paymentId, "GET");
                     $response = json_decode($api_return, true);
-                    nets_log::log($this->_nets_log, " payment api status netsOrder, response", $response);
+                    NetsLog::log($this->_NetsLog, " payment api status NetsOrder, response", $response);
                     $refUpdate = [
                         'reference' => $orderNr,
                         'checkoutUrl' => $response['payment']['checkout']['url']
                     ];
-                    nets_log::log($this->_nets_log, " refupdate netsOrder, order nr", $oOrder->oxorder__oxordernr->value);
-                    nets_log::log($this->_nets_log, " payment api status netsOrder, response checkout url", $response['payment']['checkout']['url']);
-                    nets_log::log($this->_nets_log, " refupdate netsOrder, response", $refUpdate);
+                    NetsLog::log($this->_NetsLog, " refupdate NetsOrder, order nr", $oOrder->oxorder__oxordernr->value);
+                    NetsLog::log($this->_NetsLog, " payment api status NetsOrder, response checkout url", $response['payment']['checkout']['url']);
+                    NetsLog::log($this->_NetsLog, " refupdate NetsOrder, response", $refUpdate);
                     $this->getCurlResponse($this->getUpdateRefUrl($paymentId), 'PUT', json_encode($refUpdate));
 
                     if ($this->getConfig()->getConfigParam('nets_autocapture')) {
@@ -118,7 +118,7 @@ class NetsOrderController extends NetsOrder_parent
                             foreach ($api_ret['payment']['charges'] as $ky => $val) {
                                 foreach ($val['orderItems'] as $key => $value) {
                                     if (isset($val['chargeId'])) {
-                                        $oDB = oxDb::getDb(true);
+                                        $oDB = \oxDb::getDb(true);
                                         $charge_query = "INSERT INTO `oxnets` (`transaction_id`, `charge_id`,  `product_ref`, `charge_qty`, `charge_left_qty`) " . "values ('" . $paymentId . "', '" . $val['chargeId'] . "', '" . $value['reference'] . "', '" . $value['quantity'] . "', '" . $value['quantity'] . "')";
                                         $oDB->Execute($charge_query);
                                     }
@@ -127,7 +127,7 @@ class NetsOrderController extends NetsOrder_parent
                         }
                     }
 
-                    oxRegistry::getUtils()->redirect($this->getConfig()
+                    \oxRegistry::getUtils()->redirect($this->getConfig()
                         ->getSslShopUrl() . 'index.php?cl=thankyou');
                 } else {
                     $this->getPaymentApiResponse();
@@ -189,18 +189,18 @@ class NetsOrderController extends NetsOrder_parent
     protected function update_ordernr($hash)
     {
         $oID = $this->getOrderId();
-        $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        $oOrder = \oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
         $oOrder->load($oID);
         $oOrdernr = $oOrder->oxorder__oxordernr->value;
-        nets_log::log($this->_nets_log, "netsOrder, update_ordernr: " . $oOrdernr . " for hash " . $hash);
+        NetsLog::log($this->_NetsLog, "NetsOrder, update_ordernr: " . $oOrdernr . " for hash " . $hash);
 
         if (is_numeric($oOrdernr) && ! empty($hash)) {
-            $oDb = oxDb::getDb();
+            $oDb = \oxDb::getDb();
             $oDb->execute("UPDATE oxnets SET oxordernr = ? WHERE hash = ?", [
                 $oOrdernr,
                 $hash
             ]);
-            nets_log::log($this->_nets_log, "netsOrder, in if update_ordernr: " . $oOrdernr . " for hash " . $hash);
+            NetsLog::log($this->_NetsLog, "NetsOrder, in if update_ordernr: " . $oOrdernr . " for hash " . $hash);
         }
         return $oOrdernr;
     }
@@ -215,15 +215,15 @@ class NetsOrderController extends NetsOrder_parent
      */
     public function createNetsTransaction($oOrder)
     {
-        $this->_nets_log = $this->getConfig()->getConfigParam('nets_blDebug_log');
+        $this->_NetsLog = $this->getConfig()->getConfigParam('nets_blDebug_log');
         $this->getSession()->deleteVariable('nets_err_msg');
-        nets_log::log($this->_nets_log, "netsOrder createNetsTransaction");
+        NetsLog::log($this->_NetsLog, "NetsOrder createNetsTransaction");
         $items = [];
-        $oDB = oxDb::GetDB();
+        $oDB = \oxDb::GetDB();
         $integrationType = self::HOSTED;
 
         $sUserID = $this->getSession()->getVariable("usr");
-        $oUser = oxNew("oxuser", "core");
+        $oUser = \oxNew("oxuser", "core");
         $oUser->Load($sUserID);
 
         $mySession = $this->getSession();
@@ -231,19 +231,19 @@ class NetsOrderController extends NetsOrder_parent
 
         $oID = $this->update_ordernr($this->getSession()
             ->getVariable('sess_challenge'));
-        nets_log::log($this->_nets_log, 'oID: ', $oOrder->oxorder__oxordernr->value);
+        NetsLog::log($this->_NetsLog, 'oID: ', $oOrder->oxorder__oxordernr->value);
 
         // if oID is empty, use session value
         if (empty($oID)) {
             $sGetChallenge = $this->getSession()->getVariable('sess_challenge');
             $oID = $sGetChallenge;
-            nets_log::log($this->_nets_log, "netsOrder, get oID from Session: ", $oID);
+            NetsLog::log($this->_NetsLog, "NetsOrder, get oID from Session: ", $oID);
         }
 
-        nets_log::log($this->_nets_log, 'oID: ', $oID);
+        NetsLog::log($this->_NetsLog, 'oID: ', $oID);
         $modus = $this->getConfig()->getConfigParam('nets_blMode');
 
-        $oLang = oxRegistry::getLang();
+        $oLang = \oxRegistry::getLang();
         $iLang = $oLang->getTplLanguage();
         if (! isset($iLang)) {
             $iLang = $oLang->getBaseLanguage();
@@ -451,10 +451,10 @@ class NetsOrderController extends NetsOrder_parent
         $data['checkout']['integrationType'] = $integrationType;
 
         if ($this->getConfig()->getConfigParam('nets_checkout_mode') == 'embedded') {
-            $data['checkout']['url'] = urldecode(oxRegistry::getConfig()->getShopUrl() . 'index.php?cl=thankyou');
+            $data['checkout']['url'] = urldecode(\oxRegistry::getConfig()->getShopUrl() . 'index.php?cl=thankyou');
         } else {
-            $data['checkout']['returnUrl'] = urldecode(oxRegistry::getConfig()->getShopUrl() . 'index.php?cl=order&fnc=returnhosted&paymentid=' . $paymentId);
-            $data['checkout']['cancelUrl'] = urldecode(oxRegistry::getConfig()->getShopUrl() . 'index.php?cl=order');
+            $data['checkout']['returnUrl'] = urldecode(\oxRegistry::getConfig()->getShopUrl() . 'index.php?cl=netsorder&fnc=returnhosted&paymentid=' . $paymentId);
+            $data['checkout']['cancelUrl'] = urldecode(\oxRegistry::getConfig()->getShopUrl() . 'index.php?cl=netsorder');
         }
 
         // if autocapture is enabled in nets module settings, pass it to nets api
@@ -491,16 +491,16 @@ class NetsOrderController extends NetsOrder_parent
         }
 
         try {
-            nets_log::log($this->_nets_log, "netsOrder, api request data here 2 : ", json_encode(utf8_ensure($data)));
+            NetsLog::log($this->_NetsLog, "NetsOrder, api request data here 2 : ", json_encode(utf8_ensure($data)));
             $api_return = $this->getCurlResponse($apiUrl, 'POST', json_encode($data));
             $response = json_decode($api_return, true);
 
-            nets_log::log($this->_nets_log, "netsOrder, api return data create trans: ", json_decode($api_return, true));
+            NetsLog::log($this->_NetsLog, "NetsOrder, api return data create trans: ", json_decode($api_return, true));
             // create entry in oxnets table for transaction
             nets_table::createTransactionEntry(json_encode(utf8_ensure($data)), $api_return, $this->getOrderId(), $response['paymentId'], $oID, intval(strval($oBasket->getPrice()->getBruttoPrice() * 100)));
 
             // Set language for hosted payment page
-            $language = oxRegistry::getLang()->getLanguageAbbr();
+            $language = \oxRegistry::getLang()->getLanguageAbbr();
             if ($language == 'en') {
                 $lang = 'en-GB';
             }
@@ -535,29 +535,29 @@ class NetsOrderController extends NetsOrder_parent
             if ($integrationType == self::HOSTED) {
 
                 // charge entry for database
-                oxRegistry::getUtils()->redirect($response["hostedPaymentPageUrl"] . "&language=$lang");
+                \oxRegistry::getUtils()->redirect($response["hostedPaymentPageUrl"] . "&language=$lang");
             } else {
                 $this->getSession()->setVariable('payment_id', $response['paymentId']);
                 return $response['paymentId'];
             }
         } catch (Exception $e) {
             $error_message = $e->getMessage();
-            nets_log::log($this->_nets_log, "netsOrder, api exception : ", $e->getMessage());
+            NetsLog::log($this->_NetsLog, "NetsOrder, api exception : ", $e->getMessage());
 
-            nets_log::log($this->_nets_log, "netsOrder, $error_message");
+            NetsLog::log($this->_NetsLog, "NetsOrder, $error_message");
             if (empty($error_message)) {
                 $error_message = 'Payment Api Parameter issue';
             }
             $this->getSession()->setVariable('nets_err_msg', $error_message);
-            oxRegistry::getUtils()->redirect($this->getConfig()
-                ->getSslShopUrl() . 'index.php?cl=order');
+            \oxRegistry::getUtils()->redirect($this->getConfig()
+                ->getSslShopUrl() . 'index.php?cl=netsorder');
         }
     }
 
     /* function to get return data after hosted payment checkout is done */
     public function returnhosted()
     {
-        $paymentId = oxRegistry::getConfig()->getRequestParameter('paymentid');
+        $paymentId = \oxRegistry::getConfig()->getRequestParameter('paymentid');
 
         if ($this->getConfig()->getConfigParam('nets_autocapture')) {
             $chargeResponse = $this->getCurlResponse($this->getApiUrl() . $paymentId, 'GET');
@@ -567,7 +567,7 @@ class NetsOrderController extends NetsOrder_parent
                 foreach ($api_ret['payment']['charges'] as $ky => $val) {
                     foreach ($val['orderItems'] as $key => $value) {
                         if (isset($val['chargeId'])) {
-                            $oDB = oxDb::getDb(true);
+                            $oDB = \oxDb::getDb(true);
                             $charge_query = "INSERT INTO `oxnets` (`transaction_id`, `charge_id`,  `product_ref`, `charge_qty`, `charge_left_qty`) " . "values ('" . $paymentId . "', '" . $val['chargeId'] . "', '" . $value['reference'] . "', '" . $value['quantity'] . "', '" . $value['quantity'] . "')";
                             $oDB->Execute($charge_query);
                         }
@@ -576,7 +576,7 @@ class NetsOrderController extends NetsOrder_parent
             }
         }
 
-        oxRegistry::getUtils()->redirect($this->getConfig()
+        \oxRegistry::getUtils()->redirect($this->getConfig()
             ->getSslShopUrl() . 'index.php?cl=thankyou&paymentid=' . $paymentId);
     }
 
@@ -613,7 +613,7 @@ class NetsOrderController extends NetsOrder_parent
     public function is_embedded()
     {
         $mode = $this->getConfig()->getConfigParam('nets_checkout_mode');
-        $oDB = oxDb::getDb(true);
+        $oDB = \oxDb::getDb(true);
         $sSQL_select = "SELECT OXACTIVE FROM oxpayments WHERE oxid = ? LIMIT 1";
         $payMethod = $oDB->getOne($sSQL_select, [
             self::MODULE_NAME
@@ -703,7 +703,7 @@ class NetsOrderController extends NetsOrder_parent
 
         $oBasket = $this->getSession()->getBasket();
         if ($oBasket->getProductsCount()) {
-            $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+            $oOrder = \oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
 
             // finalizing ordering process (validating, storing order into DB, executing payment, setting status ...)
             $iSuccess = $oOrder->finalizeOrder($oBasket, $oUser);
@@ -718,7 +718,7 @@ class NetsOrderController extends NetsOrder_parent
 
     public function getPaymentId($oxoder_id)
     {
-        $oDB = oxDb::getDb(true);
+        $oDB = \oxDb::getDb(true);
         $sSQL_select = "SELECT transaction_id FROM oxnets WHERE oxorder_id = ? LIMIT 1";
         $payment_id = $oDB->getOne($sSQL_select, [
             $oxoder_id
@@ -732,7 +732,7 @@ class NetsOrderController extends NetsOrder_parent
      */
     public function getLayout()
     {
-        return oxRegistry::getConfig()->getActiveView()
+        return \oxRegistry::getConfig()->getActiveView()
             ->getViewConfig()
             ->getModuleUrl("nets", "out/src/js/") . $this->getConfig()->getConfigParam('nets_layout_mode') . '.js';
     }
@@ -751,7 +751,7 @@ class NetsOrderController extends NetsOrder_parent
         if ($method == "POST" || $method == "PUT") {
             curl_setopt($oCurl, CURLOPT_POSTFIELDS, $bodyParams);
         }
-        nets_log::log($this->_nets_log, "netsOrder Curl request headers," . json_encode($this->getHeaders()));
+        NetsLog::log($this->_NetsLog, "NetsOrder Curl request headers," . json_encode($this->getHeaders()));
 
         $result = curl_exec($oCurl);
 
@@ -769,7 +769,7 @@ class NetsOrderController extends NetsOrder_parent
                 break;
         }
         if (! empty($error_message)) {
-            nets_log::log($this->_nets_log, "netsOrder Curl request error, $error_message");
+            NetsLog::log($this->_NetsLog, "NetsOrder Curl request error, $error_message");
         }
         curl_close($oCurl);
 

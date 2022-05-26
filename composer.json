@@ -12,7 +12,7 @@
             "blacklist-filter": [
                 "documentation/**/*.*"
             ],
-            "target-directory": "nets"
+            "target-directory": "nets/netseasy"
         }
     },
     "require": {
@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "OxidEsales\\NetsModule\\": "../../../source/modules/nets"
+            "OxidEsales\\NetsModule\\": "../../../../source/modules/nets/netseasy"
         }
     }
 }
