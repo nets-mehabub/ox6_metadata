@@ -1,5 +1,5 @@
 <?php 
-namespace Es\NetsEasy\Application\Models;
+namespace Es\NetsEasy\extend\Application\Models;
 
 use Es\NetsEasy\Api\NetsPaymentTypes;
 use Es\NetsEasy\Api\NetsLog;

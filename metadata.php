@@ -11,13 +11,13 @@
 /**
  * Metadata version
  */
-$sMetadataVersion = '2.0';
+$sMetadataVersion = '2.1';
 
 /**
  * Module information
  */
 $aModule = array(
-    'id' => 'esNetseasy',
+    'id' => 'esnetseasy',
     'title' => 'Nets Easy',
     'version' => '2.0.0',
     'author' => 'Nets eCom',
@@ -33,8 +33,8 @@ $aModule = array(
         'es_netseasy_OrderOverview' => \Es\NetsEasy\Application\Controller\Admin\OrderOverviewController::class        
     ),
     'extend' => array(
-                \OxidEsales\Eshop\Application\Controller\OrderController::class => \Es\NetsEasy\Application\Controller\OrderController::class,
-                \OxidEsales\Eshop\Application\Controller\PaymentController::class => \Es\NetsEasy\Application\Controller\PaymentController::class,
+				\OxidEsales\Eshop\Application\Controller\OrderController::class => \Es\NetsEasy\extend\Application\Controller\OrderController::class,
+                \OxidEsales\Eshop\Application\Controller\PaymentController::class => \Es\NetsEasy\extend\Application\Controller\PaymentController::class,
 				\Es\NetsEasy\Application\Models\PaymentGateway::class => \Es\NetsEasy\Application\Models\PaymentGateway::class,
 				\Es\NetsEasy\Core\Events::class => \Es\NetsEasy\Core\Events::class                   
 

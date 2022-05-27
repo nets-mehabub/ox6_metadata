@@ -1,5 +1,5 @@
 <?php 
-namespace Es\NetsEasy\Application\Controller;
+namespace Es\NetsEasy\extend\Application\Controller;
 /**
  * Extending thank you controller for adding payment id in frontend
  */

@@ -1,5 +1,5 @@
 <?php
-namespace Es\NetsEasy\Application\Controller\Admin;
+namespace Es\NetsEasy\extend\Application\Controller\Admin;
 
 use Es\NetsEasy\Api\NetsLog;
 /**

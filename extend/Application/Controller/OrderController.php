@@ -1,5 +1,5 @@
 <?php
-namespace Es\NetsEasy\Application\Controller;
+namespace Es\NetsEasy\extend\Application\Controller;
 
 /**
  * Nets Order Controller class
