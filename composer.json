@@ -1,6 +1,6 @@
 {
   "name": "nets-mehabub/ox6_metadata",
-  "description": "Nets Payment Module for Oxid 6",
+  "description": "Nets Payment Module for Oxid 6.4",
   "type": "oxideshop-module",
   "keywords": ["oxid", "modules", "eShop"],
   "homepage": "https://www.mollie.com/",
