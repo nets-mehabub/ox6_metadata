@@ -1,9 +1,9 @@
 <?php 
-namespace OxidEsales\NetsModule\Controller;
+namespace Es\NetsEasy\Application\Controller;
 /**
  * Extending thank you controller for adding payment id in frontend
  */
-class NetsThankyouController extends NetsThankyou_parent
+class ThankyouController extends ThankyouController_parent
 {
 	public function getPaymentId()
 	{

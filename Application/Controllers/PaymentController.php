@@ -1,12 +1,12 @@
 <?php 
-namespace OxidEsales\NetsModule\Controller;
+namespace Es\NetsEasy\Application\Controller;
 
-use OxidEsales\NetsModule\Api\NetsLog;
-use OxidEsales\NetsModule\Api\NetsPaymentTypes;
+use Es\NetsEasy\Api\NetsLog;
+use Es\NetsEasy\Api\NetsPaymentTypes;
 /**
  * Description of netsPayment
  */
-class NetsPaymentController extends NetsPaymentController_parent
+class PaymentController extends PaymentController_parent
 {
 	// var $nets_payment_types_active;
 	var $payment_types_active;

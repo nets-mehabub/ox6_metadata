@@ -1,13 +1,13 @@
 <?php
-namespace OxidEsales\NetsModule\Controller\Admin;
+namespace Es\NetsEasy\Application\Controller\Admin;
 
-use OxidEsales\NetsModule\Api\NetsLog;
+use Es\NetsEasy\Api\NetsLog;
 /**
  * order_overview.php override
  * Nets Order Overview class - In use for admin order list customization
  * Cancel, Capture, Refund and Partial nets payments
  */
-class NetsOrderOverviewController extends NetsOrderOverviewController_parent
+class OrderOverviewController extends OrderOverviewController_parent
 {
 
     const ENDPOINT_TEST = 'https://test.api.dibspayment.eu/v1/payments/';

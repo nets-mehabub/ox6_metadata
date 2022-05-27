@@ -1,5 +1,5 @@
 <?php
-namespace OxidEsales\NetsModule\Api;
+namespace Es\NetsEasy\Api;
 
 if (! class_exists("NetsLog")) {
 

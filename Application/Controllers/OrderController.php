@@ -1,16 +1,16 @@
 <?php
-namespace OxidEsales\NetsModule\Controller;
+namespace Es\NetsEasy\Application\Controller;
 
 /**
  * Nets Order Controller class
  */
-use OxidEsales\NetsModule\Api\NetsLog;
-use OxidEsales\NetsModule\Api\NetsPaymentTypes;
+use Es\NetsEasy\Api\NetsLog;
+use Es\NetsEasy\Api\NetsPaymentTypes;
 /**
  * Class controls nets payment process
  * It also shows the nets embedded checkout window
  */
-class NetsOrderController extends NetsOrderController_parent
+class OrderController extends OrderController_parent
 {
 
     const EMBEDDED = "EmbeddedCheckout";

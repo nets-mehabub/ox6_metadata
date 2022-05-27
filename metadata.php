@@ -1,17 +1,13 @@
 <?php
 /**
- * nets Oxid Payment module metadata
+ * Nets Oxid Payment module metadata
  *
  * @version 1.0.0
  * @package Nets
  * @copyright nets
  */
-use OxidEsales\Eshop\Application\Controller\OrderController;
-use OxidEsales\Eshop\Application\Controller\PaymentController;
-use OxidEsales\NetsModule\Controller\NetsOrderController;
-use OxidEsales\NetsModule\Controller\NetsPaymentController;
-use OxidEsales\NetsModule\Models\NetsPaymentGateway;
-use OxidEsales\NetsModule\Core\NetsEvents;
+
+
 /**
  * Metadata version
  */
@@ -33,14 +29,14 @@ $aModule = array(
         'en' => 'Nets safe online payments'
     ),
     'controllers' => array(       
-        'NetsThankyou' => \OxidEsales\NetsModule\Controller\NetsThankyouController::class,
-        'NetsOrderOverview' => \OxidEsales\NetsModule\Controller\Admin\NetsOrderOverviewController::class        
+        'es_netseasy_Thankyou' => \Es\NetsEasy\Application\Controller\ThankyouController::class,
+        'es_netseasy_OrderOverview' => \Es\NetsEasy\Application\Controller\Admin\OrderOverviewController::class        
     ),
     'extend' => array(
-                OrderController::class => NetsOrderController::class,
-                PaymentController::class => NetsPaymentController::class,
-		NetsPaymentGateway::class => NetsPaymentGateway::class,
-		NetsEvents::class => NetsEvents::class                   
+                \OxidEsales\Eshop\Application\Controller\OrderController::class => \Es\NetsEasy\Application\Controller\OrderController::class,
+                \OxidEsales\Eshop\Application\Controller\PaymentController::class => \Es\NetsEasy\Application\Controller\PaymentController::class,
+				\Es\NetsEasy\Application\Models\PaymentGateway::class => \Es\NetsEasy\Application\Models\PaymentGateway::class,
+				\Es\NetsEasy\Core\Events::class => \Es\NetsEasy\Core\Events::class                   
 
     ),   
     'blocks' => array(

@@ -1,5 +1,5 @@
 <?php
-namespace OxidEsales\NetsModule\Api;
+namespace Es\NetsEasy\Api;
 /*
  * nets payment type mapping to oxid payment ids
  *

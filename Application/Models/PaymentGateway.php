@@ -1,9 +1,9 @@
 <?php 
-namespace OxidEsales\NetsModule\Models;
+namespace Es\NetsEasy\Application\Models;
 
-use OxidEsales\NetsModule\Api\NetsPaymentTypes;
-use OxidEsales\NetsModule\Api\NetsLog;
-class NetsPaymentGateway extends NetsPaymentGateway_parent
+use Es\NetsEasy\Api\NetsPaymentTypes;
+use Es\NetsEasy\Api\NetsLog;
+class PaymentGateway extends PaymentGateway_parent
 {
 	protected $_NetsLog = false;
 

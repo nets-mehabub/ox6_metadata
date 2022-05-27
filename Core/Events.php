@@ -1,9 +1,9 @@
 <?php
-namespace OxidEsales\NetsModule\Core;
+namespace Es\NetsEasy\Core;
 
-use OxidEsales\NetsModule\Api\NetsLog;
-use OxidEsales\NetsModule\Api\NetsPaymentTypes;
-class NetsEvents
+use Es\NetsEasy\Api\NetsLog;
+use Es\NetsEasy\Api\NetsPaymentTypes;
+class Events
 {
 
     static $NetsLog = true;
