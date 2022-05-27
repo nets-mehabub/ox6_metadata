@@ -145,7 +145,7 @@ $aModule = array(
     ),
     'templates' => array(),    
     'events'       => array(
-        'onActivate'   => '\OxidEsales\NetsModule\Core\NetsEvents::onActivate',
-        'onDeactivate' => '\OxidEsales\NetsModule\Core\NetsEvents::onDeactivate'
+        'onActivate'   => '\Es\NetsEasy\Core\Events::onActivate',
+        'onDeactivate' => '\Es\NetsEasy\Core\Events::onDeactivate'
     )
 );
