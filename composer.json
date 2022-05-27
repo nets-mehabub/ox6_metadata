@@ -12,7 +12,7 @@
             "blacklist-filter": [
                 "documentation/**/*.*"
             ],
-            "target-directory": "es/esnetseasy"
+            "target-directory": "es/Netseasy"
         }
     },
     "require": {
@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {            
-			"Es\\NetsEasy\\": "./"
+			"Es\\NetsEasy\\": "../../../source/modules/es/Netseasy"
         }
     }
 }
